@@ -9,8 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout code
       - uses: actions/checkout@v3
 
+      # Configure AWS Credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -18,10 +20,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1  # Replace with your desired region
 
+      # Build Docker image with commit SHA as tag
       - name: Build Docker image
+        env:
+          COMMIT_SHA: ${{ github.sha }}
         run: |
-          IMAGE_TAG=latest  # Commit hash as the image tag
-          docker build -t app:$IMAGE_TAG .
+          docker build -t app:${COMMIT_SHA} .
 
       # Log in to Amazon ECR
       - name: Log in to Amazon ECR
@@ -30,10 +34,20 @@ jobs:
 
       # Push Docker image to ECR
       - name: Push Docker image to ECR
+        env:
+          COMMIT_SHA: ${{ github.sha }}
         run: |
-           docker tag app:latest 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:latest
-           docker push 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:latest
-          
+          docker tag app:${COMMIT_SHA} 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:${COMMIT_SHA}
+          docker push 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:${COMMIT_SHA}
 
+      # Update the image tag in k8s/deployment.yaml
+      - name: Update Kubernetes deployment file
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          sed -i "s|image: .*/git:.*|image: 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:${COMMIT_SHA}|" k8s/deployment.yaml
 
-    
+      # Apply the updated Kubernetes deployment
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/deployment.yaml
