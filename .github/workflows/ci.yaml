@@ -32,14 +32,8 @@ jobs:
       - name: Push Docker image to ECR
         run: |
            docker tag app:latest 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:latest
+           docker push 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:latest
           
 
 
-      # Update Kubernetes manifest with the commit hash
-      - name: Update Kubernetes manifest
-        run: |
-          sed -i "s|image:.*|image: ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${GITHUB_SHA}|" k8s/deployment.yaml
-          git config --global user.email "ayan.butt@antino.com"
-          git config --global user.name "GitHub Actions"
-          git commit -am "Update image tag to ${GITHUB_SHA}"
-          git push
+    
