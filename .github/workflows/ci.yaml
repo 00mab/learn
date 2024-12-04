@@ -3,6 +3,8 @@ name: Build and Push Docker Image to ECR
 on:
   push:
     branches: [main]
+permissions:
+  contents: write  # Grants write access to repository content
 
 jobs:
   build-and-push:
@@ -50,6 +52,7 @@ jobs:
       # Commit and push changes to GitHub
       - name: Commit and Push Changes
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMIT_SHA: ${{ github.sha }}
         run: |
           git config --global user.name "GitHub Actions"
