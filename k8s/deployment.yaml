@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: my-app-container
-          image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${GITHUB_SHA}
+          image: 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:latest
           ports:
             - containerPort: 80
           env:
