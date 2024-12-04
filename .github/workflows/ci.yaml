@@ -47,7 +47,13 @@ jobs:
         run: |
           sed -i "s|image: .*/git:.*|image: 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:${COMMIT_SHA}|" k8s/deployment.yaml
 
-      # Apply the updated Kubernetes deployment
-      - name: Deploy to Kubernetes
+      # Commit and push changes to GitHub
+      - name: Commit and Push Changes
+        env:
+          COMMIT_SHA: ${{ github.sha }}
         run: |
-          kubectl apply -f k8s/deployment.yaml
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add k8s/deployment.yaml
+          git commit -m "Update image tag to ${COMMIT_SHA}"
+          git push origin main
