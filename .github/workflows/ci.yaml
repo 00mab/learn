@@ -27,7 +27,6 @@ jobs:
       with:
         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
 
     # Run unit tests (assuming using a Node.js or similar setup)
     # - name: Run unit tests
@@ -46,7 +45,7 @@ jobs:
     # Log in to Amazon ECR
     - name: Log in to Amazon ECR
       run: |
-        aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+        aws ecr get-login-password --region ap-south-1| docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
 
     # Push the Docker image to ECR
     - name: Push Docker image to ECR
