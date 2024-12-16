@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: my-app-container
-          image: 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:aef3e35bf948153359aabf3c5c7b1afdfc96c099
+          image: 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:e44891dde2ea2d7553da1a9ef68588e797f40e8e
           ports:
             - containerPort: 80
           env:
