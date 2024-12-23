@@ -20,4 +20,10 @@ spec:
           env:
             - name: ENVIRONMENT
               value: "production"
-
+          resources:
+            requests:
+              cpu: "100m"     # Minimum CPU required (100 millicores)
+              memory: "128Mi" # Minimum memory required
+            limits:
+              cpu: "500m"     # Maximum CPU allowed
+              memory: "256Mi" # Maximum memory allowed
