@@ -4,7 +4,6 @@ metadata:
   name: my-app-deployment
   namespace: default
 spec:
-  replicas: 3
   selector:
     matchLabels:
       app: my-app
@@ -15,7 +14,7 @@ spec:
     spec:
       containers:
         - name: my-app-container
-          image: 533267303892.dkr.ecr.ap-south-1.amazonaws.com/git:e44891dde2ea2d7553da1a9ef68588e797f40e8e
+          image: nginx
           ports:
             - containerPort: 80
           env:
